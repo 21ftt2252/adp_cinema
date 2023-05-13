@@ -69,7 +69,8 @@ public class MovieDetails extends JPanel implements ActionListener {
         
         contentPanel.setBounds(10, 77, 1260, 653); //1100
         contentPanel.setPreferredSize(new Dimension(1260, 1000));
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+//        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setLayout(new GridLayout(3,3));
         add(contentPanel);
 //      contentPanel.setLayout(new BorderLayout());
 //        JScrollPane scroll = new JScrollPane(contentPanel);
@@ -102,16 +103,12 @@ public class MovieDetails extends JPanel implements ActionListener {
 		 this.movie = movie;
 		 movieId = movie.getID();
 	     loadImage(connection, pstmt, resultSet, imagePanel, movieId, imgLabel);	
-         	
-	     JPanel datePanel = new JPanel();
-         datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
-         contentPanel.add(datePanel);
-	     loadMSlots(datePanel);
+	     loadMSlots();
 	     
 	     repaint(); // Refresh the UI with the new movie details		
 	}
 	
-	public void loadMSlots(JPanel datePanel) {
+	public void loadMSlots() {
 	    try {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        connection = DriverManager.getConnection("jdbc:mysql://localhost/cinema", username, password);
@@ -122,11 +119,15 @@ public class MovieDetails extends JPanel implements ActionListener {
 	        resultSet = pstmt.executeQuery();  
             
 	        if (resultSet.next()) {
+	   	     	JPanel datePanel = new JPanel();
+	   	     	datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
+	   	     	contentPanel.add(datePanel);
+	   	     	
 	            String movieDate = resultSet.getString("movie_date");
 	            JLabel dateLabel = new JLabel(movieDate);
 	            dateLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-	            datePanel.add(dateLabel);
-
+	            datePanel.add(dateLabel);           
+            
 	            JPanel timePanel = new JPanel();
 	            timePanel.setLayout(new FlowLayout());
 	            datePanel.add(timePanel);
@@ -137,12 +138,33 @@ public class MovieDetails extends JPanel implements ActionListener {
 	            
 	            ResultSet resultSet2 = pstmt.executeQuery();
 	            while (resultSet2.next()) {
-	                String movieTime = resultSet2.getString("movie_time");
-	                JButton timeButton = new JButton(movieTime);
-	                timePanel.add(timeButton);
+	            	String movieTime = resultSet2.getString("movie_time");
+                    JButton timeButton = new JButton(movieTime);
+                    Color buttonColor = new Color(204,186,120);
+                    Dimension d2 = new Dimension(250, 50);
+                    timeButton.setBackground(buttonColor);
+                    timeButton.setPreferredSize(d2);
+                    timePanel.add(timeButton);
 	                timeButton.addActionListener(new ActionListener() {
 	                    public void actionPerformed(ActionEvent e) {
-	                        // Handle button click here
+	                    	Movie movie = new Movie();   
+	        		        movie.setID(movieId);
+	    		            movie.setTitle(titleLabel.getText());
+	    		            movie.setDate(movieDate);
+	    		            movie.setTime(movieTime);
+	                    	
+	                    	ticket ticket = new ticket();
+	                    	try {
+								ticket.setMovie(movie);								
+							} catch (SQLException e1) {								
+								e1.printStackTrace();
+							}
+	                    	
+	                    	getParent().add(ticket); 
+	                        contentPanel.setVisible(false);
+	                        ticket.setVisible(true);	                        
+	                        getParent().remove(MovieDetails.this); 
+
 	                    }
 	                });
 	            }
@@ -211,4 +233,3 @@ public class MovieDetails extends JPanel implements ActionListener {
 	}
 
 }
-
