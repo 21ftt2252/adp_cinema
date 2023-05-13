@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 import java.awt.Font;
+import java.awt.Toolkit;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -31,6 +32,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 
 public class Registration extends JPanel implements ActionListener {
 
@@ -279,7 +281,7 @@ public class Registration extends JPanel implements ActionListener {
 		btnJoin.setEnabled(false);
 		btnJoin.setBackground(new Color(192, 192, 192));
 		btnJoin.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		btnJoin.setBounds(411, 505, 105, 39);
+		btnJoin.setBounds(488, 393, 105, 39);
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ID ++;
@@ -291,6 +293,8 @@ public class Registration extends JPanel implements ActionListener {
 
 		setVisible(true);
 	}
+	
+	
 
 //----------------------------METHODS-----------------------------------
 	public void checkPasscode() {
@@ -438,6 +442,8 @@ public class Registration extends JPanel implements ActionListener {
             throw new RuntimeException(e);
         }		
 	}
+	
+
 
 
 	@Override
