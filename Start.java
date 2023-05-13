@@ -39,11 +39,10 @@ public class Start extends JFrame{
 		JPanel login = new Login();
 		contentPane.add(login, "3");
 		
-		//Book TEST
+		//Homepage
 		JPanel homepage = new nowShowing();
 		contentPane.add(homepage,"4");
-
-		
+	
 		// Method to change pages
 		pages(1);
 		
@@ -57,7 +56,6 @@ public class Start extends JFrame{
 		case 2: cardlayout.show(contentPane, "2"); break;
 		case 3: cardlayout.show(contentPane, "3"); break;
 		case 4: cardlayout.show(contentPane, "4"); break;
-		case 5: cardlayout.show(contentPane, "4"); break;
 		}
 
 	}

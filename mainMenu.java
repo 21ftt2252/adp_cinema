@@ -44,33 +44,26 @@ public class mainMenu extends JPanel implements ActionListener {
 		imgLogo.setBounds(117, 148, 163, 138);
 		addComponent(imgLogo, x = 0, y= 0);
 		
+		JButton homepageBtn = new JButton("HOMEPAGE");
+		homepageBtn.setBackground(buttonColor);
+		homepageBtn.setFont(defaultFont);
+		homepageBtn.setPreferredSize(d2);
+		addComponent(homepageBtn, x = 1, y = 1);
+		homepageBtn.addActionListener(this);
+		
 		JButton loginButton = new JButton("LOGIN");
 		loginButton.setBackground(buttonColor);
 		loginButton.setFont(defaultFont);
 		loginButton.setPreferredSize(d2);
-		addComponent(loginButton, x = 1, y = 1);
+		addComponent(loginButton, x = 1, y = 2);
 		loginButton.addActionListener(this);
 		
 		JButton registerButton = new JButton("REGISTER");
 		registerButton.setBackground(buttonColor);
 		registerButton.setFont(defaultFont);
 		registerButton.setPreferredSize(d2);
-		addComponent(registerButton, x = 1, y = 2);
+		addComponent(registerButton, x = 1, y = 3);
 		registerButton.addActionListener(this);
-		
-		JButton exitButton = new JButton("EXIT");
-		exitButton.setBackground(buttonColor);
-		exitButton.setFont(defaultFont);
-		exitButton.setPreferredSize(d2);
-		addComponent(exitButton, x = 1, y = 3);
-		exitButton.addActionListener(this);
-		
-		JButton bookingBtn = new JButton("BOOK TEST");
-		bookingBtn.setBackground(buttonColor);
-		bookingBtn.setFont(defaultFont);
-		bookingBtn.setPreferredSize(d2);
-		addComponent(bookingBtn, x = 1, y = 4);
-		bookingBtn.addActionListener(this);
 	
 	}
 	
@@ -106,17 +99,8 @@ public class mainMenu extends JPanel implements ActionListener {
 			} else if(buttonText.equals("REGISTER")) {
 				Start.pages(2);
 				
-			} else if(buttonText.equals("BOOK TEST")) {
-				Start.pages(4);
-					
-				} else if(buttonText.equals("EXIT")){
-
-				int exitResult = JOptionPane.showConfirmDialog(null, "Exit?", "Confirm Exit",
-						JOptionPane.OK_CANCEL_OPTION);
-				if (exitResult == JOptionPane.OK_OPTION) {
-					System.exit(0);
-				}
-
+			} else if(buttonText.equals("HOMEPAGE")) {
+				Start.pages(4);			
 			}
 	}
 }
