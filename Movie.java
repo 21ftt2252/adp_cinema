@@ -8,6 +8,8 @@ public class Movie {
     private String title;
     private String description;
     public JLabel imgLabel;
+    private String date;   
+    private String time;
     
     public String getID() {
     	return id;
@@ -25,13 +27,6 @@ public class Movie {
         this.title = title;
     }
     
-    public JLabel getImage() {
-    	return imgLabel;
-    }
-    
-    public void setImage(JLabel image) {
-    	this.imgLabel = image;
-    }
 
     public String getDescription() {
         return description;
@@ -40,5 +35,30 @@ public class Movie {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    public JLabel getImage() {
+    	return imgLabel;
+    }
+    
+    public void setImage(JLabel image) {
+    	this.imgLabel = image;
+    }
+    
+    public String getDate() {
+    	return date;
+    }
+    
+    public void setDate(String date) {
+    	this.date = date;
+    }
+    
+    public String getTime() {
+    	return time;
+    }
+    
+    public void setTime(String time) {
+    	this.time = time;
+    }
+ 
 
 }
