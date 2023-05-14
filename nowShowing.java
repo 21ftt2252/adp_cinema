@@ -96,16 +96,8 @@ public class nowShowing extends JPanel implements ActionListener {
                 getParent().remove(nowShowing.this); // remove the current instance of nowShowing from its parent
             }
         });
-        add(btnCS);
-        
-        JDateChooser dateChooser = new JDateChooser();
-        dateChooser.setBounds(594, 97, 112, 23);
-        add(dateChooser);
-
-        JButton btnSearch = new JButton("Search");
-        btnSearch.setBounds(720, 97, 76, 23);
-        add(btnSearch);   
-
+        add(btnCS);       
+       
         loadNowShowing();
 	}
 
