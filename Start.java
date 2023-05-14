@@ -42,6 +42,14 @@ public class Start extends JFrame{
 		//Homepage
 		JPanel homepage = new nowShowing();
 		contentPane.add(homepage,"4");
+		
+		//Movie Detail 
+//		JPanel movieDetails = new MovieDetails();
+//		contentPane.add(movieDetails,"5");
+		
+		//Ticket Page
+//		JPanel ticket = new ticket();
+//		contentPane.add(ticket, "6");
 	
 		// Method to change pages
 		pages(1);
@@ -56,6 +64,8 @@ public class Start extends JFrame{
 		case 2: cardlayout.show(contentPane, "2"); break;
 		case 3: cardlayout.show(contentPane, "3"); break;
 		case 4: cardlayout.show(contentPane, "4"); break;
+//		case 5: cardlayout.show(contentPane, "5"); break;
+//		case 6: cardlayout.show(contentPane, "6"); break;
 		}
 
 	}
