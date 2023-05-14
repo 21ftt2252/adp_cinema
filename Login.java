@@ -171,7 +171,7 @@ public class Login extends JPanel implements ActionListener {
 			boolean authenticated = authenticate(email, hashedPassword);
 
 			if (authenticated) {
-//------------------EDIT HERE; IF AUTHENTICATED, GO TO HOMEPAGE		        	
+//------------------EDIT HERE; IF AUTHENTICATED, GO TO HOMEPAGE	
 	            System.out.println("LOGIN SUCCESSFUL");
 			} else {
 				JOptionPane.showMessageDialog(this, "Invalid email or password");
