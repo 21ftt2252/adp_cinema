@@ -38,6 +38,7 @@ import java.awt.event.KeyEvent;
 public class SendCode extends JFrame {
 
 	private JPanel contentPane;
+	private JFrame Reset;
 	public JTextField email;
 	private JTextField code;
 	int randomCode; 
@@ -71,7 +72,7 @@ public class SendCode extends JFrame {
 	 * Create the frame.
 	 */
 	public SendCode() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 659, 577);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -215,15 +216,11 @@ public class SendCode extends JFrame {
 		btnReset.setVisible(false);
 		contentPane.add(btnReset);
 		
-//------------------------------VERIFY CODE---------------------------------		
+//-------------------------VERIFY CODE BUTTON---------------------------------		
 		JButton btnVerifyCode = new JButton("Verify Code");
 		btnVerifyCode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(Integer.valueOf(code.getText())==randomCode){
-//					Reset rs = new Reset();
-//					rs.setVisible(true);
-////					this.setVisible(false);
-//					((JButton) e.getSource()).getParent().getParent().setVisible(false);
 					lblNewPass.setVisible(true);
 					pw.setVisible(true);
 					lblConfirm.setVisible(true);
