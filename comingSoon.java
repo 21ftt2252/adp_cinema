@@ -40,7 +40,6 @@ public class comingSoon extends JPanel implements ActionListener {
     Statement statement = null;
 	
 	JPanel csPanel = new JPanel(); 
-	nowShowing nowShowing = new nowShowing();
 	
 	    public comingSoon() {
 			setBounds(100, 100, 986, 628);
@@ -63,22 +62,22 @@ public class comingSoon extends JPanel implements ActionListener {
 	        add(csScroll);
 	        loadComingSoon();
 	        
+	        JButton btnNS = new JButton("NOW SHOWING");
+	        btnNS.setBounds(560, 66, 125, 23);
+	        btnNS.setEnabled(true);
+	        btnNS.addActionListener(this);
+	        add(btnNS);	
+	        
 	        JButton btnCS = new JButton("COMING SOON");
 	        btnCS.setBounds(710, 66, 125, 23);
 	        btnCS.setEnabled(false);
-	        add(btnCS);
+	        btnCS.addActionListener(this);
+	        add(btnCS);       
 	        
-	        JButton btnNS = new JButton("NOW SHOWING");
-	        btnNS.setBounds(560, 66, 125, 23);
-	        btnNS.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {  
-	                getParent().add(nowShowing); // add comingSoon to the same parent as nsPanel
-	                csPanel.setVisible(false);
-	                nowShowing.setVisible(true);
-	                getParent().remove(comingSoon.this); // remove the current instance of nowShowing from its parent
-	            }
-	        });
-	        add(btnNS);
+	        JButton btnBack = new JButton("BACK");
+	        btnBack.setBounds(10, 106, 95, 23);
+	        btnBack.addActionListener(this);
+	        add(btnBack);
 	    }
 	    
 	public void loadComingSoon() {
@@ -176,7 +175,17 @@ public class comingSoon extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		String buttonText = e.getActionCommand();
+
+		if(buttonText.equals("NOW SHOWING")) {
+			Start.pages(4);
+
+		} else if(buttonText.equals("COMING SOON")) {
+			Start.pages(5);
+			
+		} else if(buttonText.equals("BACK")) {
+			Start.pages(1);			
+		}
 		
 	}
 }

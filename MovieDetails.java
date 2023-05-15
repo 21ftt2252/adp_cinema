@@ -50,11 +50,15 @@ public class MovieDetails extends JPanel implements ActionListener {
 	private JLabel imgLabel;
 
 	private Movie movie;
+	private ticket ticket;
 	
     JPanel imagePanel = new JPanel();
     String movieId;
+    private JButton btnBack;
 
-	public MovieDetails() {
+	public MovieDetails(ticket ticket) {
+		this.ticket = ticket;
+		
 		setBounds(100, 100, 986, 628);
         setLayout(null);
         setBackground(mainMenuBG);
@@ -69,13 +73,8 @@ public class MovieDetails extends JPanel implements ActionListener {
         
         contentPanel.setBounds(10, 77, 1260, 653); //1100
         contentPanel.setPreferredSize(new Dimension(1260, 1000));
-//        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setLayout(new GridLayout(3,3));
         add(contentPanel);
-//      contentPanel.setLayout(new BorderLayout());
-//        JScrollPane scroll = new JScrollPane(contentPanel);
-//        scroll.setBounds(10, 77, 1260, 653);
-//        add(scroll);
            
         imgLabel = new JLabel();
         imagePanel.setPreferredSize(new Dimension(250, 250));
@@ -96,19 +95,25 @@ public class MovieDetails extends JPanel implements ActionListener {
         description.setBackground(panelBG);    
         description.setPreferredSize(new Dimension (350,200));  
         contentPanel.add(description);
+        
+        btnBack = new JButton("BACK");
+        btnBack.setBounds(10, 43, 89, 23);
+        btnBack.addActionListener(this);
+        add(btnBack);
      
 	}
 	
 	public void setMovie(Movie movie) throws SQLException {
 		 this.movie = movie;
 		 movieId = movie.getID();
+		 titleLabel.setText(movie.getTitle());
+		 description.setText(movie.getDescription());
 	     loadImage(connection, pstmt, resultSet, imagePanel, movieId, imgLabel);	
-	     loadMSlots();
-	     
+		 loadMSlots(ticket);
 	     repaint(); // Refresh the UI with the new movie details		
 	}
 	
-	public void loadMSlots() {
+	public void loadMSlots(ticket ticket) {
 	    try {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        connection = DriverManager.getConnection("jdbc:mysql://localhost/cinema", username, password);
@@ -151,20 +156,15 @@ public class MovieDetails extends JPanel implements ActionListener {
 	        		        movie.setID(movieId);
 	    		            movie.setTitle(titleLabel.getText());
 	    		            movie.setDate(movieDate);
-	    		            movie.setTime(movieTime);
+	    		            movie.setTime(movieTime);    		           
 	                    	
-	                    	ticket ticket = new ticket();
-	                    	try {
-								ticket.setMovie(movie);								
-							} catch (SQLException e1) {								
+							try {
+								ticket.setMovie(movie);
+							} catch (SQLException e1) {
 								e1.printStackTrace();
 							}
-	                    	
-	                    	getParent().add(ticket); 
-	                        contentPanel.setVisible(false);
-	                        ticket.setVisible(true);	                        
-	                        getParent().remove(MovieDetails.this); 
-
+							            	
+	                    	Start.pages(7);
 	                    }
 	                });
 	            }
@@ -183,7 +183,6 @@ public class MovieDetails extends JPanel implements ActionListener {
 	        }
 	    }
 	}
-
 	
 	public void loadImage(Connection connection, PreparedStatement pstmt, ResultSet resultSet, JPanel imagePanel, String movieId, JLabel imageLabel) {
 	    try {
@@ -228,7 +227,12 @@ public class MovieDetails extends JPanel implements ActionListener {
     
     @Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+    	String buttonText = e.getActionCommand();
+		
+		if(buttonText.equals("BACK")) {
+			Start.pages(4);
+		}
+
 		
 	}
 

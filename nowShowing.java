@@ -2,11 +2,13 @@ package cinema;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -47,8 +49,11 @@ public class nowShowing extends JPanel implements ActionListener {
 	
 	JPanel nsPanel = new JPanel();
 	JLabel imageLabel;
+	private MovieDetails movieDetails;
 	
-	public nowShowing() {
+	public nowShowing(MovieDetails movieDetails) {
+		this.movieDetails = movieDetails;
+		
 		setBounds(100, 100, 986, 628);
         setLayout(null);
         setBackground(mainMenuBG);
@@ -61,9 +66,9 @@ public class nowShowing extends JPanel implements ActionListener {
         imgLogo.setBounds(545, 11, 304, 55);
         add(imgLogo);
 
-        nsPanel .setBounds(10, 140, 1260, 590);
-        nsPanel .setPreferredSize(new Dimension(1260, 1000));
-        nsPanel .setLayout(new GridLayout(0, 3)); // display 3 movie panels per row
+        nsPanel.setBounds(10, 140, 1260, 590);
+        nsPanel.setPreferredSize(new Dimension(1260, 1000));
+        nsPanel.setLayout(new GridLayout(0, 3)); // display 3 movie panels per row
         JScrollPane nsScroll = new JScrollPane(nsPanel);
         nsScroll.setBounds(10, 140, 1260, 590);
         add(nsScroll);
@@ -71,37 +76,24 @@ public class nowShowing extends JPanel implements ActionListener {
         JButton btnNS = new JButton("NOW SHOWING");
         btnNS.setBounds(560, 66, 125, 23);
         btnNS.setEnabled(false);
-        btnNS.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	 comingSoon comingSoon = new comingSoon();
-                 getParent().add(comingSoon); // add comingSoon panel before removing it
-                 nsPanel.setVisible(true);
-                 comingSoon.setVisible(false);
-                 btnNS.setEnabled(false);
-                 getParent().remove(nowShowing.this); 
-            }
-        });
+        btnNS.addActionListener(this);
         add(btnNS);	
         
         JButton btnCS = new JButton("COMING SOON");
         btnCS.setBounds(710, 66, 125, 23);
-        btnCS.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {      	
-            	comingSoon comingSoon = new comingSoon();
-                getParent().add(comingSoon); // add comingSoon to the same parent as nsPanel
-                nsPanel.setVisible(false);
-                comingSoon.setVisible(true);
-                btnNS.setEnabled(true);
-                btnCS.setEnabled(false);
-                getParent().remove(nowShowing.this); // remove the current instance of nowShowing from its parent
-            }
-        });
+        btnCS.setEnabled(true);
+        btnCS.addActionListener(this);
         add(btnCS);       
+        
+        JButton btnBack = new JButton("BACK");
+        btnBack.setBounds(10, 106, 95, 23);
+        btnBack.addActionListener(this);
+        add(btnBack);
        
-        loadNowShowing();
+        loadNowShowing(movieDetails);
 	}
 
-	public void loadNowShowing() {
+	public void loadNowShowing(MovieDetails movieDetails) {
 	    try {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        connection = DriverManager.getConnection("jdbc:mysql://localhost/cinema", username, password);
@@ -153,15 +145,13 @@ public class nowShowing extends JPanel implements ActionListener {
     		            movie.setTitle(titleLabel.getText());
     		            movie.setDescription(description.getText());
     		            
-        		        MovieDetails movieDetails = new MovieDetails();
         		        try {
 							movieDetails.setMovie(movie);
 						} catch (SQLException e1) {
 							
 							e1.printStackTrace();
 						}
-        		        getParent().add(movieDetails);
-        		        getParent().remove(nowShowing.this);
+        		        Start.pages(6);      		        
         		    }
 
         			@Override
@@ -225,7 +215,19 @@ public class nowShowing extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		}
+		String buttonText = e.getActionCommand();
 		
+		if(buttonText.equals("NOW SHOWING")) {
+			Start.pages(4);
+
+		} else if(buttonText.equals("COMING SOON")) {
+			Start.pages(5);
+			
+		} else if(buttonText.equals("BACK")) {
+			Start.pages(1);			
+		}		
+
 	}
+
+		
+}

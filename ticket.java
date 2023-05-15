@@ -66,7 +66,8 @@ public class ticket extends JPanel implements ActionListener{
 	static String button;
 	 
 //	public static JLabel title;
-	public static JLabel scheduleDesc;
+	public static JLabel dateSched;
+	public static JLabel timeSched;
 	
 	private String username = "root";
 	private String password = "cmaeerica";
@@ -88,6 +89,8 @@ public class ticket extends JPanel implements ActionListener{
 	private String date;
 	private String time;
 	
+	private choosingSeats choosingSeats;
+	
     JPanel imagePanel = new JPanel();
     String movieId;
     
@@ -97,8 +100,10 @@ public class ticket extends JPanel implements ActionListener{
 	public static int countdown;
 	public static JLabel Timer;
 	
-		public ticket() {
-			setBounds(100, 100, 1210, 677);
+		public ticket(choosingSeats choosingSeats) {
+			this.choosingSeats = choosingSeats;
+			
+			setBounds(100, 100, 1260, 628);
 			setLayout(null);
 
 			adultDec = new JButton("-");
@@ -147,7 +152,6 @@ public class ticket extends JPanel implements ActionListener{
 			kidInc.addActionListener(this);
 			add(kidInc);
 
-
 			twinDec = new JButton("-");
 			twinDec.setBackground(new Color(122, 122, 122));
 			twinDec.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -170,12 +174,6 @@ public class ticket extends JPanel implements ActionListener{
 			twinInc.setBounds(521, 638, 48, 33);
 			twinInc.addActionListener(this);
 			add(twinInc);
-
-			next = new JButton("Next");
-			next.setName("Next");
-			next.setBounds(583, 699, 77, 23);
-			next.addActionListener(this);
-			add(next);
 
 			Subtotal = new JLabel("Subtotal");
 			Subtotal.setHorizontalAlignment(SwingConstants.CENTER);
@@ -243,8 +241,6 @@ public class ticket extends JPanel implements ActionListener{
 			Twin.setBounds(101, 647, 62, 14);
 			add(Twin);
 
-			//
-
 			JPanel panel = new JPanel();
 			panel.setBackground(new Color(192, 192, 192));
 			panel.setBounds(77, 509, 590, 30);
@@ -267,15 +263,30 @@ public class ticket extends JPanel implements ActionListener{
 			add(Description);
 
 			JPanel TopPanel = new JPanel();
-			TopPanel.setBackground(new Color(192, 192, 192));
-			TopPanel.setBounds(0, 0, 1261, 110);
+			TopPanel.setBackground(new Color(0,103,76,255));
+			TopPanel.setBounds(0, 0, 1281, 110);
+			TopPanel.setPreferredSize(new Dimension(1260,1000));
 			add(TopPanel);
 			TopPanel.setLayout(null);
-
-			JLabel lblNewLabel = new JLabel("BN CINEPLEX");
-			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 44));
-			lblNewLabel.setBounds(537, 11, 315, 88);
-			TopPanel.add(lblNewLabel);
+			
+	        ImageIcon imgLogoTemp = new ImageIcon("image/logo.png");
+	        Image imgLogoImage = imgLogoTemp.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH); 
+	        imgLogoTemp = new ImageIcon(imgLogoImage);
+	        JLabel imgLogo = new JLabel(imgLogoTemp);
+	        imgLogo.setPreferredSize(new Dimension(350,200));
+	        imgLogo.setBounds(537, 11, 315, 88);
+	        TopPanel.add(imgLogo);
+			
+			JButton backBtn = new JButton("BACK");
+			backBtn.addActionListener(this);
+			backBtn.setBounds(10, 76, 89, 23);
+			TopPanel.add(backBtn);
+			
+			next = new JButton("NEXT");
+			next.setBounds(1180, 76, 77, 23);
+			TopPanel.add(next);
+			next.setName("Next");
+			next.addActionListener(this);
 			
 			Panel SelectTickets = new Panel();
 			SelectTickets.setBackground(new Color(180, 180, 180));
@@ -314,7 +325,7 @@ public class ticket extends JPanel implements ActionListener{
 
 			Panel BookingSuccessful = new Panel();
 			BookingSuccessful.setBackground(new Color(187, 187, 187));
-			BookingSuccessful.setBounds(928, 110, 333, 48);
+			BookingSuccessful.setBounds(928, 110, 353, 48);
 			add(BookingSuccessful);
 			BookingSuccessful.setLayout(null);
 
@@ -349,20 +360,26 @@ public class ticket extends JPanel implements ActionListener{
 			titleLabel.setBounds(206, 11, 402, 33);
 			movieD.add(titleLabel);
 					
-			scheduleDesc = new JLabel("Showing on");
-			scheduleDesc.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			scheduleDesc.setBounds(206, 55, 415, 14);
-			movieD.add(scheduleDesc);
+			dateSched = new JLabel("Showing on");
+			dateSched.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			dateSched.setBounds(206, 55, 165, 14);
+			movieD.add(dateSched);
+			
+			timeSched = new JLabel(" ");
+			timeSched.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			timeSched.setBounds(381, 55, 98, 14);
+			movieD.add(timeSched);
 			
 		setVisible(true);
 	}
-		
+
 		public void setMovie(Movie movie) throws SQLException {
 			this.movie = movie;
 			movieId = movie.getID();
 		    loadImage(connection, pstmt, resultSet, imagePanel, movieId, imgLabel);	
 		    titleLabel.setText(movie.getTitle());
-		    scheduleDesc.setText("Showing on " + movie.getDate() + " at " + movie.getTime());	    
+		    dateSched.setText("Showing on " + movie.getDate() + " at " );
+		    timeSched.setText(movie.getTime());	    
 		    repaint(); // Refresh the UI with the new movie details		
 		}			
 			
@@ -398,79 +415,124 @@ public class ticket extends JPanel implements ActionListener{
 			}
 		}
 		
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		o = (JButton)e.getSource();
-		button = o.getName();
-		totalQuantityTicket = a+k+t;
-		tp = adultSubTotal+kidSubTotal+twinSubTotal;
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String buttonText = e.getActionCommand();		
+			if(buttonText.equals("NEXT")) {
+				confirm.AdultStt.setText("$" + Integer.toString(adultSubTotal));
+				confirm.kidStt.setText("$" + Integer.toString(kidSubTotal));
+				confirm.twinStt.setText("$" + Integer.toString(twinSubTotal));
+				
+				confirm.AdultQ.setText(Integer.toString(a));
+				confirm.KidQ.setText(Integer.toString(k));
+				confirm.TwinQ.setText(Integer.toString(t));
+				
+				confirm.totalPrice.setText("$" + Integer.toString(tp));
+				choosingSeats.booked();
+			
+				Movie movie = new Movie();   
+		        movie.setID(movieId);
+	            movie.setTitle(titleLabel.getText());
+	            movie.setDate(dateSched.getText()); 
+	            movie.setTime(timeSched.getText());	            
+	                     	
+				try {
+					choosingSeats.setMovie(movie);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				Start.pages(8);
+			
+			} else if(buttonText.equals("BACK")) {
+				Start.pages(6);			
+			}		
 
-		//adult ticket
-		if(button.equals("adultDec")) {
-			if(a>0){
-				a--;
-				adultSubTotal = (a*aPrice);
-				adult.setText(Integer.toString(a));
-				adultPrice.setText("$"  +  Integer.toString(adultSubTotal));
+			o = (JButton)e.getSource();
+			button = o.getName();
+			totalQuantityTicket = a+k+t;
+			tp = adultSubTotal+kidSubTotal+twinSubTotal;
+
+			//adult ticket
+			if(button.equals("adultDec")) {
+				if(a>0){
+					a--;
+					adultSubTotal = (a*aPrice);
+					adult.setText(Integer.toString(a));
+					adultPrice.setText("$"  +  Integer.toString(adultSubTotal));
+				}
+
+			}if(button.equals("adultInc")) {
+				if(a<=10) {
+					a++;
+					adultSubTotal = (a*aPrice);
+					adult.setText(Integer.toString(a));
+					adultPrice.setText("$"  + Integer.toString(adultSubTotal));
+					System.out.println(a);
+				}
 			}
 
-		}if(button.equals("adultInc")) {
-			if(a<=10) {
-				a++;
-				adultSubTotal = (a*aPrice);
-				adult.setText(Integer.toString(a));
-				adultPrice.setText("$"  + Integer.toString(adultSubTotal));
+			//		kid ticket
+			if(button.equals("kidDec")) {
+				if(k>0){
+					k--;
+					kidSubTotal = (k*kPrice);
+					child.setText(Integer.toString(k));
+					kidPrice.setText("$"  + Integer.toString(kidSubTotal));
+				}
+			}if(button.equals("kidInc")) {
+				if(k<=10) {
+					k++;
+					kidSubTotal = (k*kPrice);
+					child.setText(Integer.toString(k));
+					kidPrice.setText("$"  + Integer.toString(kidSubTotal));
+				}
 			}
+
+			//	twin
+			if(button.equals("twinDec")) {
+				if(t>0){
+					t--;
+					twinSubTotal = (t*tPrice);
+					twin.setText(Integer.toString(t));
+					twinPrice.setText("$"  + Integer.toString(twinSubTotal));
+				}
+			}if(button.equals("twinInc")) {
+				if(t<=10) {
+					t++;
+					twinSubTotal = (t*tPrice);
+					twin.setText(Integer.toString(t));
+					twinPrice.setText("$"  + Integer.toString(twinSubTotal));
+				}
+			}
+
+			if(totalQuantityTicket==4) {
+				adultInc.setEnabled(false);
+				kidInc.setEnabled(false);
+				twinInc.setEnabled(false);
+			}if(totalQuantityTicket<4) {
+				adultInc.setEnabled(true);
+				kidInc.setEnabled(true);
+				twinInc.setEnabled(true);
+			}
+			
+//			if(button.equals("NEXT")) {
+//				confirm.AdultStt.setText("$" + Integer.toString(adultSubTotal));
+//				confirm.kidStt.setText("$" + Integer.toString(kidSubTotal));
+//				confirm.twinStt.setText("$" + Integer.toString(twinSubTotal));
+//				
+//				confirm.AdultQ.setText(Integer.toString(a));
+//				confirm.KidQ.setText(Integer.toString(k));
+//				confirm.TwinQ.setText(Integer.toString(t));
+//				
+//				confirm.totalPrice.setText("$" + Integer.toString(tp));
+//				choosingSeats.booked();
+//				Start.pages(8);
+//				return;
+//			}
+
 		}
 
-		//		kid ticket
-		if(button.equals("kidDec")) {
-			if(k>0){
-				k--;
-				kidSubTotal = (k*kPrice);
-				child.setText(Integer.toString(k));
-				kidPrice.setText("$"  + Integer.toString(kidSubTotal));
-			}
-		}if(button.equals("kidInc")) {
-			if(k<=10) {
-				k++;
-				kidSubTotal = (k*kPrice);
-				child.setText(Integer.toString(k));
-				kidPrice.setText("$"  + Integer.toString(kidSubTotal));
-			}
-		}
-
-		//	twin
-		if(button.equals("twinDec")) {
-			if(t>0){
-				t--;
-				twinSubTotal = (t*tPrice);
-				twin.setText(Integer.toString(t));
-				twinPrice.setText("$"  + Integer.toString(twinSubTotal));
-			}
-		}if(button.equals("twinInc")) {
-			if(t<=10) {
-				t++;
-				twinSubTotal = (t*tPrice);
-				twin.setText(Integer.toString(t));
-				twinPrice.setText("$"  + Integer.toString(twinSubTotal));
-			}
-		}
-
-		if(totalQuantityTicket==4) {
-			adultInc.setEnabled(false);
-			kidInc.setEnabled(false);
-			twinInc.setEnabled(false);
-		}if(totalQuantityTicket<4) {
-			adultInc.setEnabled(true);
-			kidInc.setEnabled(true);
-			twinInc.setEnabled(true);
-		}
-			Start.pages(5);
-			return;
-
-	}
 
 }
 
